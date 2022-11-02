@@ -15,11 +15,13 @@ public class FileUtils {
 	public static boolean isFileExistsWithExceptionHandling(Path p) {
 		try {
 			Scanner input = new Scanner(new File(p.toUri()));
-			return true;
+			if (input.hasNext()) {
+				return true;				
+			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
-			return false;
 		}
+		return false;
 	}
 
 	public static void createFileIfNotExists(Path p) {
@@ -46,7 +48,7 @@ public class FileUtils {
 	
 	public static void deleteFile(Path p) {
 		try {
-			if(Files.notExists(p)) {
+			if(Files.exists(p)) {
 				Files.delete(p);							
 			}
 		} catch (IOException e) {
@@ -72,13 +74,21 @@ public class FileUtils {
 	
 	public static void main(String[] args) throws IOException {  
 		
-		Path p = Paths.get(HOME + "/tests.txt");
-		System.out.println(p.toUri());
+		Path p = Paths.get(HOME + "/test.txt");
 		
-		isFileExistsWithExceptionHandling(p);
+		System.out.println(isFileExistsWithExceptionHandling(p));
 		createFileIfNotExists(p);
 		System.out.println(isFileExist(p));
-				
+		
+		writeFile(p);
+		readFile(p);
+		
+		updateFile(p, "This is an update.");
+		readFile(p);
+		
+//		deleteFile(p);
+		
+		System.out.println(isFileExist(p));
 	}
 }
 
