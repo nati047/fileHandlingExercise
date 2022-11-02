@@ -4,12 +4,12 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.Scanner;
 
+
 public class FileUtils {
 	public static String HOME = System.getProperty("user.dir");
 	
 	public static boolean isFileExist(Path p) throws IOException {
-		boolean fileExists = Files.exists(p);
-		return fileExists;
+		 return Files.exists(p);
 	}
 	
 	public static boolean isFileExistsWithExceptionHandling(Path p) {
@@ -32,14 +32,53 @@ public class FileUtils {
 		}
 	}
 	
+	public static void readFile(Path p) {
+		try {
+			Scanner scan = new Scanner(p);
+			while(scan.hasNext()) {
+				System.out.println(scan.nextLine());
+			}
+			scan.close();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		} 
+	}
+	
+	public static void deleteFile(Path p) {
+		try {
+			if(Files.notExists(p)) {
+				Files.delete(p);							
+			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public static void writeFile(Path p) throws IOException {
+		if(Files.exists(p)){
+		     FileWriter writer = new FileWriter(new File(p.toUri()));
+		     writer.write("Writting to file- exercise 7.5");
+		     writer.close();
+		 }
+	}
+
+	public static void updateFile(Path p, String update) throws IOException {
+		if(Files.exists(p)){
+		     FileWriter writer = new FileWriter(new File(p.toUri()));
+		     writer.write(update);
+		     writer.close();
+		 }
+	}
+	
 	public static void main(String[] args) throws IOException {  
 		
-		Path p = Paths.get(HOME + "/test.txt");
+		Path p = Paths.get(HOME + "/tests.txt");
 		System.out.println(p.toUri());
 		
+		isFileExistsWithExceptionHandling(p);
 		createFileIfNotExists(p);
-		File f1 = new File(p.toUri());
 		System.out.println(isFileExist(p));
+				
 	}
 }
 
